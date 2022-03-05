@@ -23,26 +23,42 @@ DeepChorus Version 1.0
 
 ## 模型介绍
 本模型的实验结果在大多数情况下都优于现有的最先进的方法。
+![](img/overall.png)
 
 DeepChorus的总体框架如图所示。
 我们将合唱检测视为一个分类问题，模型的输出是一个二进制向量，表示副歌或非副歌。 模型以mel频谱图作为输入，同时输入歌曲可以是任意长度。
 
 ### 多分辨率网络
+<div align="center"><img src="img/Multi-Scale.png" width="500px"></div>
+
 该模块结构和加入模块前后的效果如上所示。
 
 该策略的核心思想是:先将输入特征下采样到低分辨率以方便提取全局信息，然后再合并到高分辨率。 通过对不同尺度下采样/上采样，并重复交换信息，可以得到能够区分副歌和非副歌的向量，并在几层之后突出区域信息进行进一步处理。
 
 ### 自注意力卷积
+<div align="center"><img src="img/self-attention.png" width="500px"></div>
+
 我们设计了一个SA-Conv（Self-Attention Convolution）模块作为基本模块。 在块中，使用了自注意层和卷积层。 三个SA-Conv块依次堆叠形成主体结构。本模块采用两个卷积层将序列处理成概率曲线，表示副歌的存在与否。  
+
+网络中，自注意力卷积的过程可视化:
+
+<div align="center"><img src="img/SA-Conv_vis.png" width="500px"></div>
 
 ## 实验结果
 
 ### 消融实验
 加入HRNet与否，或加入SA-Conv模块与否的消融实验结果：
 
+<div align="center"><img src="img/AS.png" width="500px"></div>
+
 ### 对比实验
 和[Pop-Music-Highlighter]("github.com/remyhuang/pop-music-highlighter")、[2021ICASSP]("ieeexplore.ieee.org/abstract/document/9413773")、
 [SCluster]("ieeexplore.ieee.org/abstract/document/6637644")、[CNMF]("archives.ismir.net/ismir2014/paper/000319.pdf")的对比结果：
+
+<div align="center"><img src="img/compare.png" width="500px"></div>
+   
+和几个baseline对比的可视化：
+<div align="center"><img src="img/visualization.png" width="500px"></div>
 
 ## 快速使用
 
