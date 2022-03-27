@@ -5,9 +5,9 @@ import joblib
 import librosa
 warnings.filterwarnings("ignore", category=UserWarning)
 
-SR = 32000
+SR = 22050
 N_FFT = 2048
-N_HOP = 1024
+N_HOP = 512
 N_MEL = 128
 
 data_path = 'feature_folder'
