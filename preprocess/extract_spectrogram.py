@@ -8,7 +8,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 SR = 32000
 N_FFT = 2048
 N_HOP = 1024
-N_MEL = 96
+N_MEL = 128
 
 data_path = 'feature_folder'
 
