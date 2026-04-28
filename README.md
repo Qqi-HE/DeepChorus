@@ -6,46 +6,6 @@
 
 ---
 
-## Overview
-
-Chorus detection aims to identify the chorus sections (the most recurring or "catchiest" parts) from music recordings. DeepChorus is an end-to-end chorus detection model that combines multi-resolution networks with self-attention mechanisms.
-
-Experimental results show that DeepChorus outperforms existing state-of-the-art methods in most cases.
-
----
-
-## Model Architecture
-
-DeepChorus frames chorus detection as a binary classification problem. The model takes mel-spectrograms as input and outputs a binary vector indicating chorus vs. non-chorus regions. Input songs can be of arbitrary length.
-
-### Multi-Scale Network (HRNet-style)
-
-The core idea is to downsample input features to lower resolutions for extracting global information, then merge back to high resolution. By repeatedly exchanging information across different scales via downsampling/upsampling, the model produces discriminative representations for distinguishing chorus from non-chorus segments.
-
-### Self-Attention Convolution (SA-Conv)
-
-We design an SA-Conv module as the basic building block. Each block contains a self-attention layer followed by convolution layers. Three SA-Conv blocks are stacked to form the main structure. The module processes sequences into probability curves indicating chorus presence.
-
-![SA-Conv visualization](img/SA-Conv_vis.png)
-
----
-
-## Results
-
-### Ablation Study
-
-Performance with/without HRNet and SA-Conv modules:
-
-![Ablation study](img/AS.png)
-
-### Comparison with Baselines
-
-Comparison with [Pop-Music-Highlighter](https://github.com/remyhuang/pop-music-highlighter), [ICASSP 2021](https://ieeexplore.ieee.org/abstract/document/9413773), [SCluster](https://ieeexplore.ieee.org/abstract/document/6637644), and [CNMF](https://archives.ismir.net/ismir2014/paper/000319.pdf):
-
-![Comparison](img/compare.png)
-
----
-
 ## Quick Start
 
 ### Environment
@@ -85,6 +45,46 @@ python ./train.py -n DeepChorus -m Deepchorus_20220304
 ```
 
 Trained models are saved in `./model/`.
+
+---
+
+## Model Architecture
+
+DeepChorus frames chorus detection as a binary classification problem. The model takes mel-spectrograms as input and outputs a binary vector indicating chorus vs. non-chorus regions. Input songs can be of arbitrary length.
+
+### Multi-Scale Network (HRNet-style)
+
+The core idea is to downsample input features to lower resolutions for extracting global information, then merge back to high resolution. By repeatedly exchanging information across different scales via downsampling/upsampling, the model produces discriminative representations for distinguishing chorus from non-chorus segments.
+
+### Self-Attention Convolution (SA-Conv)
+
+We design an SA-Conv module as the basic building block. Each block contains a self-attention layer followed by convolution layers. Three SA-Conv blocks are stacked to form the main structure. The module processes sequences into probability curves indicating chorus presence.
+
+![SA-Conv visualization](img/SA-Conv_vis.png)
+
+---
+
+## Overview
+
+Chorus detection aims to identify the chorus sections (the most recurring or "catchiest" parts) from music recordings. DeepChorus is an end-to-end chorus detection model that combines multi-resolution networks with self-attention mechanisms.
+
+Experimental results show that DeepChorus outperforms existing state-of-the-art methods in most cases.
+
+---
+
+## Results
+
+### Ablation Study
+
+Performance with/without HRNet and SA-Conv modules:
+
+![Ablation study](img/AS.png)
+
+### Comparison with Baselines
+
+Comparison with [Pop-Music-Highlighter](https://github.com/remyhuang/pop-music-highlighter), [ICASSP 2021](https://ieeexplore.ieee.org/abstract/document/9413773), [SCluster](https://ieeexplore.ieee.org/abstract/document/6637644), and [CNMF](https://archives.ismir.net/ismir2014/paper/000319.pdf):
+
+![Comparison](img/compare.png)
 
 ---
 

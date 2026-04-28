@@ -1,6 +1,6 @@
 # DeepChorus 版本 1.0
 
-[English](./README.md) | 中文 | [日本語](./README_JP.md)
+[English](./README.md) | 中文
 
 ## 目录
 
