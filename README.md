@@ -48,6 +48,27 @@ Trained models are saved in `./model/`.
 
 ---
 
+## Project Structure
+
+```
+deepchorus/
+├── network/
+│   ├── DeepChorus.py      # Model definition
+│   └── utils.py           # Utilities (attention, etc.)
+├── preprocess/
+│   └── extract_spectrogram.py
+├── train.py               # Training script
+├── test.py                # Testing script
+├── generator.py           # Data generator
+├── loader.py              # Data loader
+├── evaluator.py           # Evaluation metrics
+├── constant.py            # Configuration
+├── README.md
+└── README_CN.md
+```
+
+---
+
 ## Model Architecture
 
 DeepChorus frames chorus detection as a binary classification problem. The model takes mel-spectrograms as input and outputs a binary vector indicating chorus vs. non-chorus regions. Input songs can be of arbitrary length.
@@ -85,27 +106,6 @@ Performance with/without HRNet and SA-Conv modules:
 Comparison with [Pop-Music-Highlighter](https://github.com/remyhuang/pop-music-highlighter), [ICASSP 2021](https://ieeexplore.ieee.org/abstract/document/9413773), [SCluster](https://ieeexplore.ieee.org/abstract/document/6637644), and [CNMF](https://archives.ismir.net/ismir2014/paper/000319.pdf):
 
 ![Comparison](img/compare.png)
-
----
-
-## Project Structure
-
-```
-deepchorus/
-├── network/
-│   ├── DeepChorus.py      # Model definition
-│   └── utils.py           # Utilities (attention, etc.)
-├── preprocess/
-│   └── extract_spectrogram.py
-├── train.py               # Training script
-├── test.py                # Testing script
-├── generator.py           # Data generator
-├── loader.py              # Data loader
-├── evaluator.py           # Evaluation metrics
-├── constant.py            # Configuration
-├── README.md
-└── README_CN.md
-```
 
 ---
 
