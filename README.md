@@ -1,104 +1,149 @@
-DeepChorus Version 1.0
-===========================
-中文 | [English]()
-## 目录
-* [概览](#任务概览)
-* [模型](#模型介绍)
-    * [多分辨率网络](#多分辨率网络)（High Resolution Network, HRNet)
-    * [自注意力卷积](#自注意力卷积)（Self-Attention）
-* [实验结果](#实验结果)
-    * [消融实验](#消融实验)
-    * [对比实验](#对比实验)
-* [快速使用](#快速使用)
-* [引用](#引用)
+# DeepChorus
 
+**A Hybrid Model of Multi-scale Convolution and Self-attention for Chorus Detection**
 
-## 任务概览
+[English](./README.md) | [中文](./README_CN.md)
 
+---
 
-副歌提取（Chorus Detection）旨在提取出一段乐曲中的副歌（乐曲中重复最多或“最抓耳”的部分）段落。本任务开创性地提出了一种结合多分辨率和自注意力机制的端到端副歌检测模型DeepChorus。
+## Overview
 
-本模型的实验结果在大多数情况下都优于现有的最先进的方法。
+Chorus detection aims to identify the chorus sections (the most recurring or "catchiest" parts) from music recordings. DeepChorus is an end-to-end chorus detection model that combines multi-resolution networks with self-attention mechanisms.
 
+Experimental results show that DeepChorus outperforms existing state-of-the-art methods in most cases.
 
-## 模型介绍
-本模型的实验结果在大多数情况下都优于现有的最先进的方法。
-![](img/overall.png)
+## Paper Citation
 
-DeepChorus的总体框架如图所示。
-我们将合唱检测视为一个分类问题，模型的输出是一个二进制向量，表示副歌或非副歌。 模型以mel频谱图作为输入，同时输入歌曲可以是任意长度。
+If you use this code or our paper in your research, please cite:
 
-### 多分辨率网络
-<div align="center"><img src="img/Multi-Scale.png" width="500px"></div>
+```bibtex
+@INPROCEEDINGS{DeepChorus,
+  author={He, Qiqi and Sun, Xiaoheng and Zhu, Jun and others},
+  title={A Hybrid Model of Multi-scale Convolution and Self-attention for Chorus Detection},
+  booktitle={ICASSP 2022 - 2022 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  year={2022},
+  pages={4368--4372},
+  doi={10.1109/ICASSP43922.2022.9746919}
+}
+```
 
-该模块结构和加入模块前后的效果如上所示。
+Or in arXiv format:
 
-该策略的核心思想是:先将输入特征下采样到低分辨率以方便提取全局信息，然后再合并到高分辨率。 通过对不同尺度下采样/上采样，并重复交换信息，可以得到能够区分副歌和非副歌的向量，并在几层之后突出区域信息进行进一步处理。
+```bibtex
+@misc{DeepChorus,
+  title={A Hybrid Model of Multi-scale Convolution and Self-attention for Chorus Detection},
+  author={Qiqi He and Xiaoheng Sun and Jun Zhu and others},
+  year={2022},
+  eprint={2202.06338},
+  archivePrefix={arXiv},
+  primaryClass={eess.AS}
+}
+```
 
-### 自注意力卷积
-<div align="center"><img src="img/self-attention.png" width="500px"></div>
+- **arXiv**: https://arxiv.org/abs/2202.06338
+- **IEEE Xplore**: https://doi.org/10.1109/ICASSP43922.2022.9746919
+- **Google Scholar**: https://scholar.google.com/citations?user=6oILYNcAAAAJ
 
-我们设计了一个SA-Conv（Self-Attention Convolution）模块作为基本模块。 在块中，使用了自注意层和卷积层。 三个SA-Conv块依次堆叠形成主体结构。本模块采用两个卷积层将序列处理成概率曲线，表示副歌的存在与否。  
+---
 
-网络中，自注意力卷积的过程可视化:
+## Model Architecture
 
-<div align="center"><img src="img/SA-Conv_vis.png" width="500px"></div>
+DeepChorus frames chorus detection as a binary classification problem. The model takes mel-spectrograms as input and outputs a binary vector indicating chorus vs. non-chorus regions. Input songs can be of arbitrary length.
 
-## 实验结果
+### Multi-Scale Network (HRNet-style)
 
-### 消融实验
-加入HRNet与否，或加入SA-Conv模块与否的消融实验结果：
+The core idea is to downsample input features to lower resolutions for extracting global information, then merge back to high resolution. By repeatedly exchanging information across different scales via downsampling/upsampling, the model produces discriminative representations for distinguishing chorus from non-chorus segments.
 
-<div align="center"><img src="img/AS.png" width="500px"></div>
+### Self-Attention Convolution (SA-Conv)
 
-### 对比实验
-和[Pop-Music-Highlighter]("github.com/remyhuang/pop-music-highlighter")、[2021ICASSP]("ieeexplore.ieee.org/abstract/document/9413773")、
-[SCluster]("ieeexplore.ieee.org/abstract/document/6637644")、[CNMF]("archives.ismir.net/ismir2014/paper/000319.pdf")的对比结果：
+We design an SA-Conv module as the basic building block. Each block contains a self-attention layer followed by convolution layers. Three SA-Conv blocks are stacked to form the main structure. The module processes sequences into probability curves indicating chorus presence.
 
-<div align="center"><img src="img/compare.png" width="500px"></div>
-   
-和几个baseline对比的可视化：
-<div align="center"><img src="img/visualization.png" width="500px"></div>
+![SA-Conv visualization](img/SA-Conv_vis.png)
 
-## 快速使用
+---
 
-### 环境需求
-```python
+## Results
+
+### Ablation Study
+
+Performance with/without HRNet and SA-Conv modules:
+
+![Ablation study](img/AS.png)
+
+### Comparison with Baselines
+
+Comparison with [Pop-Music-Highlighter](https://github.com/remyhuang/pop-music-highlighter), [ICASSP 2021](https://ieeexplore.ieee.org/abstract/document/9413773), [SCluster](https://ieeexplore.ieee.org/abstract/document/6637644), and [CNMF](https://archives.ismir.net/ismir2014/paper/000319.pdf):
+
+![Comparison](img/compare.png)
+
+---
+
+## Quick Start
+
+### Environment
+
+```
 python==3.6.2
 tensorflow==2.1.0
 librosa==0.8.1
 joblib==1.1.0
-madmom==0.16.1  #(运行ICASSP 2021 baseline 时需要）
+madmom==0.16.1  # (required for ICASSP 2021 baseline)
 ```
 
-### 提取特征
-请先在extract_spectrogram.py中将 'source_path' 更换为音源路径。
+### Feature Extraction
 
-执行：
-```python
+Set your audio source path in `preprocess/extract_spectrogram.py`, then run:
+
+```bash
 python ./preprocess/extract_spectrogram.py
 ```
-### 预训练模型测试
-请将constant.py中的 "test_feature_files" 和 "test_annotation_files" 参数分别替换为 __提取好的特征joblib文件__ 和 __指定标签格式的joblib__ 文件，其中标签的格式为：
-```python
-dict = { 'song_name' = [[0, 10], [52, 80], ...], ...}
-```
 
-执行：
-```python
+### Testing with Pre-trained Model
+
+Replace `test_feature_files` and `test_annotation_files` in `constant.py` with your extracted feature `.joblib` files and annotation `.joblib` files (format: `dict = {'song_name': [[0, 10], [52, 80], ...], ...}`).
+
+```bash
 python ./test.py -n DeepChorus -m Deepchorus_2021
 ```
-该程序返回测试集的R, P, F及AUC结果。
 
-### 训练
-训练需要将constant.py中的 "train_feature_files" 和 "train_annotation_files" 参数分别替换为 __提取好的特征joblib文件__ 和 __指定标签格式的joblib__ 文件，其中标签的格式同上。
-执行：
-```python
+This outputs R, P, F and AUC for the test set.
+
+### Training
+
+Replace `train_feature_files` and `train_annotation_files` in `constant.py` similarly, then:
+
+```bash
 python ./train.py -n DeepChorus -m Deepchorus_20220304
 ```
-训练后模型将保存在./model文件夹中
 
-## 引用
-该论文发表在ICASSP 2022中，目前已上传在Arxiv上： [[pdf]]("arxiv.org/abs/2202.06338")
+Trained models are saved in `./model/`.
 
-Citation将会在会议后同步更新。
+---
+
+## Project Structure
+
+```
+deepchorus/
+├── network/
+│   ├── DeepChorus.py      # Model definition
+│   └── utils.py           # Utilities (attention, etc.)
+├── preprocess/
+│   └── extract_spectrogram.py
+├── train.py               # Training script
+├── test.py                # Testing script
+├── generator.py           # Data generator
+├── loader.py              # Data loader
+├── evaluator.py           # Evaluation metrics
+├── constant.py            # Configuration
+├── README.md
+└── README_CN.md
+```
+
+---
+
+## Related Work
+
+- [Pop-Music-Highlighter](https://github.com/remyhuang/pop-music-highlighter)
+- [ICASSP 2021 Baseline](https://ieeexplore.ieee.org/abstract/document/9413773)
+- [SCluster](https://ieeexplore.ieee.org/abstract/document/6637644)
+- [CNMF](https://archives.ismir.net/ismir2014/paper/000319.pdf)
